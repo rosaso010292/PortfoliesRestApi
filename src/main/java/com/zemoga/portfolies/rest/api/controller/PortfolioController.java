@@ -2,7 +2,6 @@ package com.zemoga.portfolies.rest.api.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -136,18 +135,25 @@ public class PortfolioController {
 	public ResponseEntity<?> getTweetsByUserName(@RequestParam(value = "userName", required = true) String userName) {
 		log.info("Init Get Tweets By UserName....");
 		log.info("Request: {userName:" + userName + "}");
+		if (userName.isEmpty()) {
+			log.info("Response: userName is empty");
+			return ResponseEntity.notFound().build();
+		}
 		Twitter twitter = twitterApi.getTwitterInstance();
 		List<TweetsResponse> tweets = new ArrayList<>();
 		ResponseList<Status> response;
 		try {
 			response = twitter.getUserTimeline(userName);
 			if (!response.isEmpty()) {
-				IntStream.range(0, 5).forEach(index -> {
-					Status status = response.get(index);
+				int index = 1;
+				for (Status status : response) {
+					if (index == 5) {
+						break;
+					}
 					tweets.add(new TweetsResponse(status.getUser().getName(), status.getUser().getScreenName(),
 							status.getText(), status.getUser().getProfileImageURL()));
 					index++;
-				});
+				}
 			}
 		} catch (TwitterException e) {
 			log.info("Response: Error: " + e);

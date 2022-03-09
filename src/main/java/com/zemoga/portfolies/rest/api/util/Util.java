@@ -59,7 +59,7 @@ public class Util {
 	}
 
 	public static String getMessageNotFound(Long id) {
-		return "Order with ID :" + id + " Not Found!";
+		return "Portfolio with ID :" + id + " Not Found!";
 	}
 
 }
