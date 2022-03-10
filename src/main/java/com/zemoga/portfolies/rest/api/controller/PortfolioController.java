@@ -34,7 +34,6 @@ import twitter4j.TwitterException;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/v1")
-@Validated
 public class PortfolioController {
 	@Autowired
 	private PortfolioService service;
